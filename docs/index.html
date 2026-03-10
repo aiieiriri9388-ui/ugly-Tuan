@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>美团外卖柜 Web 演示</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="hero-card">
+      <div class="hero-copy">
+        <p class="eyebrow">Project 2 / Web Demo</p>
+        <h1>美团外卖柜多线程网页演示</h1>
+        <p class="hero-text">
+          通过 Web Worker 模拟后台线程串行处理骑手投递与用户开柜命令。
+          页面可直接部署到 GitHub Pages 或 Vercel，打开网址即可使用。
+        </p>
+      </div>
+      <div class="hero-metrics">
+        <div class="metric-pill">
+          <span>Worker</span>
+          <strong id="worker-indicator">在线</strong>
+        </div>
+        <div class="metric-pill">
+          <span>命令队列</span>
+          <strong id="queue-size">0</strong>
+        </div>
+        <div class="metric-pill">
+          <span>当前订单</span>
+          <strong id="order-number">MT-1001</strong>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-grid">
+      <section class="panel locker-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Smart Locker Stage</p>
+            <h2>柜体舞台</h2>
+          </div>
+          <div class="status-chip" id="door-status-chip">柜门关闭</div>
+        </div>
+
+        <div class="locker-summary">
+          <div class="summary-card">
+            <span>最近来源</span>
+            <strong id="last-actor">系统</strong>
+          </div>
+          <div class="summary-card">
+            <span>最新命令</span>
+            <strong id="last-action">等待操作</strong>
+          </div>
+          <div class="summary-card">
+            <span>柜体播报</span>
+            <strong id="locker-status">柜门已关闭，可等待骑手投递</strong>
+          </div>
+        </div>
+
+        <div class="locker-stage">
+          <div class="locker-scene">
+            <div class="scene-glow"></div>
+            <div class="locker-shell" id="locker-shell">
+              <div class="screen-bar">
+                <span class="screen-label">智能外卖柜</span>
+                <strong id="screen-state">待机</strong>
+              </div>
+              <div class="side-module left"></div>
+              <div class="side-module right"></div>
+              <div class="locker-bay">
+                <div class="bay-depth"></div>
+                <div class="bay-rail left"></div>
+                <div class="bay-rail right"></div>
+                <div class="parcel">
+                  <span>美团外卖</span>
+                </div>
+                <div class="door door-left"></div>
+                <div class="door door-right"></div>
+              </div>
+              <div class="locker-brand">MEITUAN SMART LOCKER</div>
+              <div class="locker-toe-kick"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel terminal-panel rider-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Courier Console</p>
+            <h2>骑手端</h2>
+          </div>
+          <div class="mini-badge">开柜 → 放餐 → 关柜</div>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-screen">
+            <div class="screen-row">
+              <span>设备状态</span>
+              <strong id="courier-device-status">等待投递</strong>
+            </div>
+            <div class="screen-row">
+              <span>后台线程</span>
+              <strong id="thread-state">空闲</strong>
+            </div>
+          </div>
+          <div class="action-grid">
+            <button class="action-button action-button-primary" data-command="courier-open">骑手开柜</button>
+            <button class="action-button action-button-dark" data-command="courier-close">骑手关柜</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel terminal-panel user-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">User App</p>
+            <h2>用户手机端</h2>
+          </div>
+          <div class="mini-badge dark">远程开柜 → 取餐 → 关柜</div>
+        </div>
+        <div class="phone-shell">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-card">
+              <span>手机提示</span>
+              <strong id="user-message">暂无新通知</strong>
+            </div>
+            <div class="action-grid phone-actions">
+              <button class="action-button action-button-primary" data-command="user-open">用户开柜</button>
+              <button class="action-button action-button-dark" data-command="user-close">用户关柜</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel log-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Command Timeline</p>
+            <h2>命令日志</h2>
+          </div>
+          <div class="mini-badge">Web Worker 串行执行</div>
+        </div>
+        <div class="log-list" id="log-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
